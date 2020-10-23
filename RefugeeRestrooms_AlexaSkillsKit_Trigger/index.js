@@ -1,5 +1,3 @@
-require("app-module-path").addPath(__dirname);
-
 const Alexa = require("ask-sdk-core");
 
 const HelloIntentHandler = {
@@ -8,7 +6,7 @@ const HelloIntentHandler = {
     },
     handle(handlerInput) {
         return handlerInput.responseBuilder
-            .speak("Hi there Alexa")
+            .speak("Hi there Alexa Code")
             .withShouldEndSession(true)
             .getResponse();
     }
@@ -21,7 +19,7 @@ const LogResponseInterceptor = {
 };
 
 let skill;
-module.exports = async function (context, event) {
+module.exports = async function (event, context) {
     if (!skill) {
         skill = Alexa.SkillBuilders.custom()
             .addRequestHandlers(
@@ -33,10 +31,5 @@ module.exports = async function (context, event) {
             .create();
     }
 
-    const response = await skill.invoke(event.body, context);
-    context.res = {
-        status: 200,
-        body: response
-    };
-    return;
+    return skill.invoke(event, context);
 }

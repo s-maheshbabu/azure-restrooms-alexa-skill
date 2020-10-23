@@ -43,6 +43,22 @@ jspm_packages/
 # TypeScript v1 declaration files
 typings/
 
+# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+# node-waf configuration
+.lock-wscript
+
+# Compiled binary addons (http://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directories
+node_modules
+jspm_packages
+
+# Distribution directories
+dist
+
 # Optional npm cache directory
 .npm
 
@@ -92,3 +108,9 @@ bin
 obj
 appsettings.json
 local.settings.json
+
+# Optional REPL history
+.node_repl_history
+
+# Mac system file
+**/.DS_Store

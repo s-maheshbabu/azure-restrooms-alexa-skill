@@ -1,4 +1,5 @@
 {
+  "scriptFile": "azure_index.js",
   "bindings": [
     {
       "authLevel": "anonymous",
