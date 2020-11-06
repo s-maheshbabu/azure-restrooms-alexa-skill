@@ -15,6 +15,7 @@
   "homepage": "https://github.com/s-maheshbabu/restrooms-alexa-skill#readme",
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.1.13",
+    "@sendgrid/mail": "^7.4.0",
     "app-module-path": "^2.2.0",
     "ask-sdk-core": "^2.9.0",
     "ask-sdk-model": "^1.29.0",

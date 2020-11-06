@@ -5,6 +5,9 @@ const icons = require("constants/Icons").icons;
 let AWS = require('aws-sdk');
 AWS.config.update({ region: 'us-east-1' });
 
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 const FROM_ADDRESS = "Refugee Restrooms <refugee.restrooms@gmail.com>";
 const SUBJECT_LINE = "Refugee Restrooms - Alexa Skill";
 
@@ -24,6 +27,12 @@ let transporter;
  * @param {*} restrooms The restrooms whose details needs to be composed into an email.
  */
 async function sendEmail(toAddress, zipcode, restrooms) {
+    const isSendGridEnabled = process.env.IS_SENDGRID_ENABLED;
+    if (isSendGridEnabled) {
+        await sendEmailOverSendGrid(toAddress, zipcode, restrooms);
+        console.log(`Email successfully sent over SendGrid.`);
+        return;
+    }
     if (!EmailValidator.validate(toAddress)) throw new Error(`Invalid email address provided: ${toAddress}`);
     if (!Array.isArray(restrooms) || restrooms.length == 0) throw new Error(`At least one restroom should be provided as an array: ${restrooms}`);
 
@@ -38,6 +47,21 @@ async function sendEmail(toAddress, zipcode, restrooms) {
     console.log(`Email successfully sent. Email Id: ${info.messageId}.`);
 
     // What happens if sending email fails?
+}
+
+async function sendEmailOverSendGrid(toAddress, zipcode, restrooms) {
+    const email = {
+        from: FROM_ADDRESS,
+        to: toAddress,
+        subject: SUBJECT_LINE + ' (Powered by Azure)',
+        html: buildBody(zipcode, restrooms.slice(0, MAXIMUM_RESULTS)),
+    };
+
+    console.log(`Attempting to sendemail over SendGrid.`);
+
+    console.time("send-email-over-azure-latency");
+    await sgMail.send(email);
+    console.timeEnd("send-email-over-azure-latency");
 }
 
 // TODO: This still needs to be tested.
